@@ -1,6 +1,6 @@
 let zxSocket;
 
-let zxPendingResponses = {};
+const zxPendingResponses = {};
 
 let zxEmit = async (zxMessage, zxData = {}) => {
     const zxId = Math.random().toString().replace(/^[0.]+/g, '');
@@ -68,10 +68,11 @@ window.zxeConnect = () => {
 };
 
 window.zxeCreateGame = async () => {
-    const zxCreated = zxEmit('zxCreateGame');
+    const zxCreated = await zxEmit('zxCreateGame');
     zxiLobby.style.display = 'none';
     zxiInGame.style.display = 'flex';
-    console.log(zxCreated);
+    const zxWord = await zxEmit('zxFetchWord');
+    console.log(zxWord);
 };
 
 window.zxeSendInput = async (zxEvent) => {

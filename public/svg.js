@@ -1,7 +1,7 @@
 // Global state
 const state = {
     dom: {
-        svg: document.getElementById("zxiSvg"),
+        svg: document.getElementById('zxiSvg'),
         svgPt: null,
         path: null,
     },
@@ -17,11 +17,11 @@ const state = {
 
 // SVG drawing stuff
 const createSvgPath = (p) => {
-    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path.setAttribute("class", "zxStroke");
-    path.setAttribute("d", `M ${p.x} ${p.y}`);
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('class', 'zxStroke');
+    path.setAttribute('d', `M ${p.x} ${p.y}`);
     state.dom.svg.appendChild(path);
-    
+
     return path;
 };
 
@@ -37,7 +37,7 @@ const getSvgPoint = e => {
         state.dom.svg.getScreenCTM().inverse()
     );
     state.paths.current.push(p);
-    
+
     return p;
 };
 
@@ -45,10 +45,10 @@ const onStartStroke = e => {
     if (state.mouse.down) {
         return;
     }
-    
+
     state.mouse.down = true;
     state.mouse.up = false;
-    
+
     // Init SVG path
     state.dom.path = createSvgPath(getSvgPoint(e));
 };
@@ -57,7 +57,7 @@ const onEndStroke = e => {
     if (state.mouse.up) {
         return;
     }
-    
+
     // Store current iteration of strokes
     // and reset current drawing state
     state.mouse.down = false;
@@ -71,7 +71,7 @@ const onStroke = e => {
     if (!state.mouse.down) {
         return;
     }
-    
+
     // Update SVG path
     const p = getSvgPoint(e);
     const d = state.dom.path.getAttribute('d') + ` L ${p.x} ${p.y}`;
@@ -80,9 +80,9 @@ const onStroke = e => {
 
 // Events hooks
 [
-    [onStartStroke, "mousedown", "touchstart"],
-    [onEndStroke, "mouseup", "mouseout", "touchend"],
-    [onStroke, "mousemove", "touchmove"],
+    [onStartStroke, 'mousedown', 'touchstart'],
+    [onEndStroke, 'mouseup', 'mouseout', 'touchend'],
+    [onStroke, 'mousemove', 'touchmove'],
 ].map(([handler, ...events]) => {
     events.map((eName) => {
         state.dom.svg.addEventListener(eName, handler)

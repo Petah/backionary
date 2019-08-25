@@ -1,9 +1,18 @@
+const zxWordList = {
+    zxEasy: ['cat', 'dog', 'tree', 'bat', 'hat', 'frog', 'bark'],
+    zxMedium: ['dragon', 'danger', 'flappy', 'rhino'],
+    zxHard: ['hippopotamus', 'dinosaurs', 'extraordinary', 'fabulous'],
+}
+
 class ZxGame {
 	constructor() {
 		this.zxId = Math.random().toString().replace(/^[0.]+/g, '');
 		this.zxName = null;
 		this.zxPlayers = [];
 		this.zxTexts = [];
+		this.zxCurrentPlayer = null;
+		this.zxCurrentWord = null;
+		this.zxCurrentDrawData = null;
 	}
 }
 
@@ -12,6 +21,8 @@ class ZxPlayer {
 		this.zxSocketId = zxSocketId;
 		this.zxName = null;
 		this.zxGame = null;
+		this.zxScore = null;
+		this.zxDrawnWords = [];
 	}
 }
 
@@ -42,6 +53,11 @@ let zxHandlers = {
 	zxSubmitText(zxPlayer, zxData) {
 		zxGames[zxPlayer.zxGameId].zxTexts.push([zxPlayer.name, zxData.zxText]);
 		return zxGames[zxPlayer.zxGameId].zxTexts;
+	},
+
+	zxFetchWord(zxPlayer, zxData) {
+		// @todo difficulty
+		return zxWordList.zxEasy[Math.floor(Math.random() * zxWordList.zxEasy.length)];
 	},
 };
 
