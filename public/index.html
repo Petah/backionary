@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Backionary</title>
+    <meta charset="UTF-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html,
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        div {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        span {
+            display: flex;
+            flex-direction: row;
+            flex: 1;
+        }
+
+        #zxiLobbyGames {}
+
+        #zxiDebug {
+            background-color: green;
+        }
+
+        #zxiMain {
+        }
+
+        #zxiDebug {
+            overflow: auto;
+        }
+
+        #zxiDraw {
+            flex: 1;
+            background: red;
+        }
+
+        #zxiChatLog {
+            background: turquoise;
+        }
+
+        #zxiChatInput {
+            width: 100%;
+        }
+
+        .zxcSidebar {
+            float: left;
+            background: yellow;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="zxiMain">
+        <div id="zxiIntroScreen">
+            Welcome to Backionary. A word game where you try to get the written word backwards. Enter you name below and
+            click connect to get started.
+            <div>
+                Name
+                <input id="zxiName">
+                <button id="zxiConnect" onclick="zxeConnect()">Connect</button>
+            </div>
+        </div>
+        <div id="zxiLobby" style="display: none">
+            <div id="zxiLobbyGames">
+                <b>List of games</b>
+                @todo
+                <button>Join Game</button>
+            </div>
+            <button onclick="zxeCreateGame()">Create Game</button>
+        </div>
+        <span id="zxiInGame" style="display: none">
+            <div class="zxcSidebar">
+                <b>List of players</b>
+                <div>Petah</div>
+                <div>Melon Logic</div>
+                <div>@todo</div>
+                <div>@todo</div>
+                <div>@todo</div>
+                <div>@todo</div>
+            </div>
+            <div>
+                <div id="zxiDraw">
+                    <svg></svg>
+                </div>
+                <pre id="zxiChatLog">
+                </pre>
+                <input id="zxiChatInput" onkeypress="zxeSendInput(event)">
+            </div>
+        </span>
+    </div>
+    <div id="zxiDebug">
+        <pre id="zxiLog"></pre>
+        <p>
+            <a href="/stat">Statistics</a>
+        </p>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/debug.js"></script>
+    <script src="/shared.js"></script>
+    <script src="/client.js"></script>
+
+</body>
+
+</html>
