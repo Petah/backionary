@@ -55,7 +55,7 @@ let zxBindSocket = () => {
         }
         zxPendingResponses[zxId](zxData);
     });
-}
+};
 
 window.zxeConnect = () => {
     zxSocket = io({

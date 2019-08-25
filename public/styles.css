@@ -1,0 +1,74 @@
+/* Global */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100vw;
+  height: 100vh;
+  background-color: #fff7f8;
+}
+
+div {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+span {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+
+#zxiLobbyGames {}
+
+#zxiDebug {
+  background-color: green;
+}
+
+#zxiMain {
+}
+
+#zxiDebug {
+  overflow: auto;
+}
+
+#zxiChatLog {
+  background: turquoise;
+}
+
+#zxiChatInput {
+  width: 100%;
+}
+
+.zxcSidebar {
+  float: left;
+  background: yellow;
+}
+
+/* SVG */
+#zxiDraw {
+  flex: 1;
+  border: 6px solid #ab1f65;
+}
+
+#zxiDraw {
+  height: 400px;
+  margin: auto;
+  text-align: center;
+}
+
+path,
+.zxStroke {
+  fill: none;
+  fill-opacity: 0;
+  stroke: #000000;
+  stroke-width: 4px;
+}
