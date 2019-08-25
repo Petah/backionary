@@ -41,7 +41,7 @@ const getSvgPoint = e => {
     return p;
 };
 
-const onStartStroke = e => {
+const zxOnStartStroke = e => {
     if (state.mouse.down) {
         return;
     }
@@ -53,7 +53,8 @@ const onStartStroke = e => {
     state.dom.path = createSvgPath(getSvgPoint(e));
 };
 
-const onEndStroke = e => {
+const zxOnEndStroke = e => {
+    console.log('zxOnEndStroke');
     if (state.mouse.up) {
         return;
     }
@@ -67,22 +68,23 @@ const onEndStroke = e => {
     state.dom.path = null;
 };
 
-const onStroke = e => {
+const zxOnStroke = e => {
     if (!state.mouse.down) {
         return;
     }
 
     // Update SVG path
     const p = getSvgPoint(e);
+    console.log(p);
     const d = state.dom.path.getAttribute('d') + ` L ${p.x} ${p.y}`;
     state.dom.path.setAttribute('d', d);
 };
 
 // Events hooks
 [
-    [onStartStroke, 'mousedown', 'touchstart'],
-    [onEndStroke, 'mouseup', 'mouseout', 'touchend'],
-    [onStroke, 'mousemove', 'touchmove'],
+    [zxOnStartStroke, 'mousedown', 'touchstart'],
+    [zxOnEndStroke, 'mouseup', 'touchend'],
+    [zxOnStroke, 'mousemove', 'touchmove'],
 ].map(([handler, ...events]) => {
     events.map((eName) => {
         state.dom.svg.addEventListener(eName, handler)
