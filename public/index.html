@@ -31,40 +31,36 @@
                 <div>Petah</div>
                 <div>Melon Logic</div>
                 <div>@todo</div>
-                <div>@todo</div>
-                <div>@todo</div>
-                <div>@todo</div>
             </div>
             <div>
                 <div id="zxiDraw">
                     <svg
                         id="zxiSvg"
                         xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                        xml:space="preserve"
-                        version="1.1"
-                        width="640px"
-                        height="400px"
+                        width="100%"
+                        height="100%"
                         fill="white">
                     </svg>
                 </div>
+                <button onclick="zxeDoneDrawing()">Done</button>
                 <pre id="zxiChatLog">
                 </pre>
                 <input id="zxiChatInput" onkeypress="zxeSendInput(event)">
             </div>
         </span>
     </div>
-    <div id="zxiDebug">
+    <!-- <div id="zxiDebug">
         <pre id="zxiLog"></pre>
         <p>
             <a href="/stat">Statistics</a>
         </p>
-    </div>
+    </div> -->
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/debug.js"></script>
     <script src="/shared.js"></script>
     <script src="/client.js"></script>
+    <script src="/handlers.js"></script>
     <script src="/svg.js"></script>
 
 </body>

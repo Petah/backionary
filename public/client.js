@@ -56,36 +56,3 @@ let zxBindSocket = () => {
         zxPendingResponses[zxId](zxData);
     });
 };
-
-window.zxeConnect = () => {
-    zxSocket = io({
-        upgrade: false,
-        transports: [
-            'websocket',
-        ],
-    });
-    zxBindSocket();
-};
-
-window.zxeCreateGame = async () => {
-    const zxCreated = await zxEmit('zxCreateGame');
-    zxiLobby.style.display = 'none';
-    zxiInGame.style.display = 'flex';
-    const zxWord = await zxEmit('zxFetchWord');
-    console.log(zxWord);
-};
-
-window.zxeSendInput = async (zxEvent) => {
-    // Enter
-    if (zxEvent.keyCode == 13) {
-        const zxText = zxiChatInput.value;
-        zxiChatInput.value = '';
-        const zxResponse = await zxEmit('zxSubmitText', {
-            zxText: zxText,
-        });
-        zxiChatLog.innerHTML = '';
-        for (const zxLine of zxResponse) {
-            zxiChatLog.innerHTML += zxLine + '\n';
-        }
-    }
-};

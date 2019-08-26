@@ -1,92 +1,64 @@
-// Global state
-const state = {
-    dom: {
-        svg: document.getElementById('zxiSvg'),
-        svgPt: null,
-        path: null,
-    },
-    mouse: {
-        down: false,
-        up: false,
-    },
-    paths: {
-        list: [],
-        current: []
-    },
-};
+zxSvgPoint = null;
+zxPathElement = null;
+zxPaths = [];
+zxCurrentPath = [];
 
 // SVG drawing stuff
-const createSvgPath = (p) => {
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('class', 'zxStroke');
-    path.setAttribute('d', `M ${p.x} ${p.y}`);
-    state.dom.svg.appendChild(path);
+zxCreateSvgPath = (zxPoint) => {
+    const zxPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    zxPath.setAttribute('class', 'zxStroke');
+    zxPath.setAttribute('d', `M ${zxPoint.x} ${zxPoint.y}`);
+    zxiSvg.appendChild(zxPath);
+    return zxPath;
+};
 
-    return path;
+zxAppendSvgPath = (zxPath, zxPoint) => {
+    zxPath.setAttribute('d', zxPath.getAttribute('d') + ` L ${zxPoint.x} ${zxPoint.y}`);
 };
 
 // SVG events stuff
-const getSvgPoint = e => {
-    if (!state.dom.svgPt) {
-        state.dom.svgPt = state.dom.svg.createSVGPoint();
+getSvgPoint = (e) => {
+    if (!zxSvgPoint) {
+        zxSvgPoint = zxiSvg.createSVGPoint();
     }
-    state.dom.svgPt.x = e.clientX;
-    state.dom.svgPt.y = e.clientY;
+    zxSvgPoint.x = e.clientX;
+    zxSvgPoint.y = e.clientY;
 
-    const p = state.dom.svgPt.matrixTransform(
-        state.dom.svg.getScreenCTM().inverse()
-    );
-    state.paths.current.push(p);
-
-    return p;
+    const zxPoint = zxSvgPoint.matrixTransform(zxiSvg.getScreenCTM().inverse());
+    zxCurrentPath.push(zxPoint);
+    return zxPoint;
 };
 
-const zxOnStartStroke = e => {
-    if (state.mouse.down) {
+zxBind = (zxEvents, zxCallback) => {
+    for (const zxEvent of zxEvents) {
+        zxiSvg.addEventListener(zxEvent, zxCallback);
+    }
+};
+
+zxBind(['mousedown', 'touchstart'], (e) => {
+    if (zxPathElement) {
         return;
     }
 
-    state.mouse.down = true;
-    state.mouse.up = false;
-
     // Init SVG path
-    state.dom.path = createSvgPath(getSvgPoint(e));
-};
+    zxPathElement = zxCreateSvgPath(getSvgPoint(e));
+});
 
-const zxOnEndStroke = e => {
-    console.log('zxOnEndStroke');
-    if (state.mouse.up) {
+zxBind(['mouseup', 'touchend'], (e) => {
+    if (!zxPathElement) {
         return;
     }
 
     // Store current iteration of strokes
-    // and reset current drawing state
-    state.mouse.down = false;
-    state.mouse.up = true;
-    state.paths.list.push(state.paths.current);
-    state.paths.current = [];
-    state.dom.path = null;
-};
+    zxPaths.push(zxCurrentPath);
+    zxCurrentPath = [];
+    zxPathElement = null;
+});
 
-const zxOnStroke = e => {
-    if (!state.mouse.down) {
+zxBind(['mousemove', 'touchmove'], (e) => {
+    if (!zxPathElement) {
         return;
     }
 
-    // Update SVG path
-    const p = getSvgPoint(e);
-    console.log(p);
-    const d = state.dom.path.getAttribute('d') + ` L ${p.x} ${p.y}`;
-    state.dom.path.setAttribute('d', d);
-};
-
-// Events hooks
-[
-    [zxOnStartStroke, 'mousedown', 'touchstart'],
-    [zxOnEndStroke, 'mouseup', 'touchend'],
-    [zxOnStroke, 'mousemove', 'touchmove'],
-].map(([handler, ...events]) => {
-    events.map((eName) => {
-        state.dom.svg.addEventListener(eName, handler)
-    });
+    zxAppendSvgPath(zxPathElement, getSvgPoint(e));
 });

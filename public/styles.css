@@ -13,6 +13,7 @@ body {
   width: 100vw;
   height: 100vh;
   background-color: #fff7f8;
+  overflow: hidden;
 }
 
 div {
@@ -60,9 +61,6 @@ span {
 }
 
 #zxiDraw {
-  height: 400px;
-  margin: auto;
-  text-align: center;
 }
 
 path,
