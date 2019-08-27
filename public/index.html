@@ -46,7 +46,8 @@
         </div>
         <div>
             <div class="zxPaper zxTextCenter">
-                <h1>Write the word:<br />Cat</h1>
+                <h1>Write the word:</h1>
+                <h1 id="zxiWord">Cat</h1>
             </div>
             <div id="zxiDraw" class="zxBox zxPaper">
                 <svg id="zxiSvg" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="white">
@@ -60,15 +61,8 @@
             </div>
         </div>
     </div>
-    <!-- <div id="zxiDebug">
-        <pre id="zxiLog"></pre>
-        <p>
-            <a href="/stat">Statistics</a>
-        </p>
-    </div> -->
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/shared.js"></script>
     <script src="/client.js"></script>
     <script src="/handlers.js"></script>
     <script src="/svg.js"></script>

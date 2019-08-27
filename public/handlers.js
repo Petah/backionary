@@ -13,7 +13,7 @@ zxeCreateGame = async () => {
     zxiLobby.style.display = 'none';
     zxiInGame.style.display = 'flex';
     const zxWord = await zxEmit('zxFetchWord');
-    console.log(zxWord);
+    zxiWord.innerText = zxWord;
 };
 
 zxeSendInput = async (zxEvent) => {
