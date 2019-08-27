@@ -32,7 +32,32 @@ zxeSendInput = async (zxEvent) => {
 };
 
 zxeDoneDrawing = async () => {
+    zxGetPathBounds(zxPaths);
     zxPlayBack(zxPaths);
+};
+
+zxGetPathBounds = async (zxPaths) => {
+    let zxMinX = 10000;
+    let zxMinY = 10000;
+    let zxMaxX = 0;
+    let zxMaxY = 0;
+    for (const zxPath of zxPaths) {
+        for (const zxPoint of zxPath) {
+            if (zxPoint.x < zxMinX) {
+                zxMinX = zxPoint.x;
+            }
+            if (zxPoint.y < zxMinY) {
+                zxMinY = zxPoint.y;
+            }
+            if (zxPoint.x > zxMaxX) {
+                zxMaxX = zxPoint.x;
+            }
+            if (zxPoint.y > zxMaxY) {
+                zxMaxY = zxPoint.y;
+            }
+        }
+    }
+    zxiSvg.setAttribute('viewBox', `${zxMinX - 5} ${zxMinY - 5} ${zxMaxX - zxMinX + 10} ${zxMaxY - zxMinY + 10}`);
 };
 
 zxPlayBack = async (zxPaths) => {

@@ -29,13 +29,13 @@ getSvgPoint = (e) => {
     return zxPoint;
 };
 
-zxBind = (zxEvents, zxCallback) => {
+zxBind = (zxElement, zxEvents, zxCallback) => {
     for (const zxEvent of zxEvents) {
-        zxiSvg.addEventListener(zxEvent, zxCallback);
+        zxElement.addEventListener(zxEvent, zxCallback);
     }
 };
 
-zxBind(['mousedown', 'touchstart'], (e) => {
+zxBind(zxiSvg, ['mousedown', 'touchstart'], (e) => {
     if (zxPathElement) {
         return;
     }
@@ -44,7 +44,7 @@ zxBind(['mousedown', 'touchstart'], (e) => {
     zxPathElement = zxCreateSvgPath(getSvgPoint(e));
 });
 
-zxBind(['mouseup', 'touchend'], (e) => {
+zxBind(document, ['mouseup', 'touchend'], (e) => {
     if (!zxPathElement) {
         return;
     }
@@ -55,7 +55,7 @@ zxBind(['mouseup', 'touchend'], (e) => {
     zxPathElement = null;
 });
 
-zxBind(['mousemove', 'touchmove'], (e) => {
+zxBind(document, ['mousemove', 'touchmove'], (e) => {
     if (!zxPathElement) {
         return;
     }

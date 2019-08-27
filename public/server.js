@@ -51,8 +51,10 @@ let zxHandlers = {
 	},
 
 	zxSubmitText(zxPlayer, zxData) {
-		zxGames[zxPlayer.zxGameId].zxTexts.push([zxPlayer.name, zxData.zxText]);
-		return zxGames[zxPlayer.zxGameId].zxTexts;
+		if (zxData.zxText.trim()) {
+			zxGames[zxPlayer.zxGameId].zxTexts.push(`${zxPlayer.name}: ${zxData.zxText}`);
+		}
+		return zxGames[zxPlayer.zxGameId].zxTexts.slice(-5);
 	},
 
 	zxFetchWord(zxPlayer, zxData) {

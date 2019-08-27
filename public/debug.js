@@ -12,3 +12,9 @@ zxLog = (...zxArgs) => {
     //     }).join(' ') + '\n';
     // }
 };
+
+zxiName.value = 'PetahNZ';
+zxeConnect();
+setTimeout(() => {
+    zxeCreateGame();
+}, 100);
