@@ -28,6 +28,9 @@
     "sqlite3": "^4.0.9"
   },
   "devDependencies": {
-    "mocha": "^6.1.4"
+    "esminify": "^3.0.6",
+    "html-minifier": "^4.0.0",
+    "mocha": "^6.1.4",
+    "uglifycss": "0.0.29"
   }
 }
