@@ -1,4 +1,3 @@
-zxSvgPoint = null;
 zxPathElement = null;
 zxPaths = [];
 zxCurrentPath = [];
@@ -18,15 +17,17 @@ zxAppendSvgPath = (zxPath, zxPoint) => {
 
 // SVG events stuff
 getSvgPoint = (e) => {
-    if (!zxSvgPoint) {
-        zxSvgPoint = zxiSvg.createSVGPoint();
-    }
+    let zxSvgPoint = zxiSvg.createSVGPoint();
     zxSvgPoint.x = e.clientX;
     zxSvgPoint.y = e.clientY;
 
-    const zxPoint = zxSvgPoint.matrixTransform(zxiSvg.getScreenCTM().inverse());
-    zxCurrentPath.push(zxPoint);
-    return zxPoint;
+    zxSvgPoint = zxSvgPoint.matrixTransform(zxiSvg.getScreenCTM().inverse());
+    zxSvgPoint = {
+        x: zxSvgPoint.x,
+        y: zxSvgPoint.y,
+    };
+    zxCurrentPath.push(zxSvgPoint);
+    return zxSvgPoint;
 };
 
 zxBind = (zxElement, zxEvents, zxCallback) => {

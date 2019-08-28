@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <div id="zxiIntroScreen" class="zxFlexRow zxFlexCenter zxFlexGrow">
+    <div class="zxIntroScreen zxFlexRow zxFlexCenter zxFlexGrow">
         <div class="zxFlexRow zxBox zxPaper zxTextCenter">
             <div class="zxFlexCol zxFlexCenter zxFlexGrow">
                 <h1>Welcome to Backionary.</h1>
@@ -26,7 +26,7 @@
             </div>
         </div>
     </div>
-    <div id="zxiLobby" style="display: none" class="zxFlexRow zxFlexCenter zxFlexGrow">
+    <div class="zxLobby zxFlexRow zxFlexCenter zxFlexGrow">
         <div class="zxBox zxPaper zxFlexRow">
             <div id="zxiLobbyGames">
                 <b>List of games</b>
@@ -38,31 +38,36 @@
             </div>
         </div>
     </div>
-    <div id="zxiInGame" style="display: none" class="zxFlexRow zxFlexCenter zxFlexGrow">
+    <div class="zxDrawing zxGuessing zxFlexRow zxFlexCenter zxFlexGrow">
         <div class="zxPaper">
             <b>List of players</b>
             <div>Petah 300pts</div>
             <div>Melon Logic 270pts</div>
         </div>
         <div>
-            <div class="zxPaper zxTextCenter">
+            <div class="zxDrawing zxTextCenter">
                 <h1>Write the word:</h1>
-                <h1 id="zxiWord">Cat</h1>
+                <h1 id="zxiWord"></h1>
             </div>
-            <div id="zxiDraw" class="zxBox zxPaper">
+            <div class="zxGuessing zxTextCenter">
+                <h1>Guess the word!</h1>
+            </div>
+            <div id="zxiDraw" class="zxDrawing zxGuessing zxBox zxPaper">
                 <svg id="zxiSvg" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="white">
                 </svg>
             </div>
-            <button onclick="zxeDoneDrawing()">Debug: Playback</button>
-            <div class="zxPaper">
-                <div id="zxiChatLog"></div>
-                <hr />
+            <div class="zxDrawing zxTextCenter">
+                <button onclick="zxeDoneDrawing()">Finished</button>
+            </div>
+            <div class="zxGuessing zxPaper">
                 Your guess: <input id="zxiChatInput" onkeypress="zxeSendInput(event)">
+                <div id="zxiChatLog"></div>
             </div>
         </div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
+    <script src="/shared.js"></script>
     <script src="/client.js"></script>
     <script src="/handlers.js"></script>
     <script src="/svg.js"></script>

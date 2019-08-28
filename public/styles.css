@@ -19,6 +19,10 @@ body {
   user-select: none;
 }
 
+#zxiDraw {
+  background-image: url(lines.svg);
+}
+
 .zxFlexCenter {
   align-items: center;
   justify-content: center;
@@ -50,8 +54,21 @@ body {
 .zxPaper {
   background: #fff;
   padding: 1rem;
+  margin: 1rem;
   border: solid 2px #41403E;
   border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
+
+button {
+  font-family: 'Segoe Print', 'Freestyle Script', 'Lucida Calligraphy', 'Lucida Handwriting', 'Segoe Script', 'Comic Sans', cursive;
+  background: #ddd;
+  padding: 0.5rem;
+  border: solid 2px #41403E;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 hr {
@@ -70,7 +87,8 @@ hr .zxVr {
 }
 
 #zxiSvg {
-  cursor: url(pencil.png) 0 128, auto;;
+  cursor: url(pencil.png) 0 128, auto;
+  ;
 }
 
 path,
@@ -81,4 +99,13 @@ path,
   stroke-width: 4px;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+input {
+  padding: 0.5rem;
+  font-family: 'Segoe Print', 'Freestyle Script', 'Lucida Calligraphy', 'Lucida Handwriting', 'Segoe Script', 'Comic Sans', cursive;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  border-bottom: 1px dashed #aaa;
 }

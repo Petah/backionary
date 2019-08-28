@@ -1,46 +1,60 @@
 let zxSocket;
 
-const zxPendingResponses = {};
+const zxHide = (zxClass) => {
+    for (const zxElement of document.querySelectorAll('.' + zxClass)) {
+        zxElement.style.display = 'none';
+    }
+};
 
-const zxEmit = async (zxMessage, zxData = {}) => {
-    const zxId = Math.random().toString().replace(/^[0.]+/g, '');
-    zxLog('Send', zxMessage, zxData, zxId);
-    const zxPromise = new Promise(zxResolve => {
-        zxPendingResponses[zxId] = zxResolve;
-    });
-    zxSocket.emit('zxMessage', [zxMessage, zxId, zxData]);
-    return zxPromise;
+const zxShow = (zxClass) => {
+    for (const zxElement of document.querySelectorAll('.' + zxClass)) {
+        zxElement.style.display = '';
+    }
 };
 
 const zxSetState = (zxState, zxData) => {
-    zxiIntroScreen.style.display = 'none';
-    zxiLobby.style.display = 'none';
-    zxiInGame.style.display = 'none';
+    zxHide('zxIntroScreen');
+    zxHide('zxLobby');
+    zxHide('zxInGame');
+    zxHide('zxDrawing');
+    zxHide('zxGuessing');
+    zxShow(zxState);
     switch (zxState) {
-        case 'zxiIntroScreen':
-            zxiIntroScreen.style.display = 'flex';
-            break;
-        case 'zxiLobby':
-            zxiLobby.style.display = 'flex';
-            break;
-        case 'zxiInGame':
-            zxiInGame.style.display = 'flex';
-            break;
-        case 'zxDrawing':
-            zxiInGame.style.display = 'flex';
+        case 'zxGuessing':
+            zxiSvg.innerHTML = '';
+            zxiSvg.setAttribute('viewBox', zxData.zxPathBounds);
             break;
     }
 };
 
+const zxHandlers = {
+    zxDrawerStart(zxPlayer, zxData) {
+        zxSetState('zxDrawing');
+    },
+
+    zxDrawing(zxPlayer, zxData) {
+        zxSetState('zxGuessing', zxData);
+    },
+
+    zxNextPoint(zxPlayer, zxData) {
+        let zxPathElement = zxiSvg.querySelectorAll('path')[zxData.zxCurrentPath];
+        if (!zxPathElement) {
+            zxPathElement = zxCreateSvgPath(zxData.zxNextPoint);
+        } else {
+            zxAppendSvgPath(zxPathElement, zxData.zxNextPoint);
+        }
+        console.log(zxData.zxCurrentPath);
+    },
+};
+
 const zxBindSocket = () => {
     zxSocket.on('connect', async () => {
-        zxLog('Connected');
-        const zxConnected = await zxEmit('zxConnect', {
+        await zxEmitAwait(zxSocket, 'zxConnect', {
             zxName: zxiName.value,
         });
         zxSetState('zxiLobby');
-        const games = await zxEmit('zxListGames');
-        console.log(games);
+        const games = await zxEmitAwait(zxSocket, 'zxListGames');
+        // @todo show list of games in lobby
     });
 
     zxSocket.on('disconnect', () => {
@@ -51,19 +65,16 @@ const zxBindSocket = () => {
         setTimeout(() => location.reload(), 1000);
     });
 
-    zxSocket.on('zxDrawerStart', (zxDrawerStart) => {
-        console.log('zxDrawerStart', zxDrawerStart);
-        zxSetState('zxDrawing', zxDrawerStart);
-    });
+    zxSocket.on('zxMessage', zxHandleMessage(zxSocket));
 
     zxSocket.on('zxResponse', (zxResponse) => {
-        zxLog('Response', zxResponse);
+        zxLog('Received response', zxResponse);
         if (!zxResponse || zxResponse.length !== 3) {
             console.error('Invalid response structure', zxResponse, zxResponse.length);
             return;
         }
-        const [zxId, zxFunction, zxData] = zxResponse;
-        if (!zxId || !zxFunction || !zxData || !zxPendingResponses[zxId]) {
+        const [zxHandler, zxId, zxData] = zxResponse;
+        if (!zxId || !zxHandler || !zxPendingResponses[zxId]) {
             console.error('Invalid response data', zxId, zxData);
             return;
         }
