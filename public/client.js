@@ -20,6 +20,10 @@ const zxSetState = (zxState, zxData) => {
     zxHide('zxGuessing');
     zxShow(zxState);
     switch (zxState) {
+        case 'zxDrawing':
+            zxiWord.innerText = zxData.zxWord;
+            zxiSvg.setAttribute('viewBox', '');
+            break;
         case 'zxGuessing':
             zxiSvg.innerHTML = '';
             zxiSvg.setAttribute('viewBox', zxData.zxPathBounds);
@@ -29,7 +33,7 @@ const zxSetState = (zxState, zxData) => {
 
 const zxHandlers = {
     zxDrawerStart(zxPlayer, zxData) {
-        zxSetState('zxDrawing');
+        zxSetState('zxDrawing', zxData);
     },
 
     zxDrawing(zxPlayer, zxData) {
@@ -43,7 +47,6 @@ const zxHandlers = {
         } else {
             zxAppendSvgPath(zxPathElement, zxData.zxNextPoint);
         }
-        console.log(zxData.zxCurrentPath);
     },
 };
 

@@ -23,7 +23,7 @@ zxeSendInput = async (zxEvent) => {
         });
         zxiChatLog.innerHTML = '';
         for (const zxLine of zxResponse) {
-            zxiChatLog.innerHTML += zxLine + '\n';
+            zxiChatLog.innerText += zxLine + '\n';
         }
     }
 };

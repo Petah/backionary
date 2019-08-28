@@ -41,7 +41,6 @@ const zxEmitResponse = (zxSocket, zxHandler, zxId, zxResponse = {}) => {
 
 const zxSerialize = (zxObject) => {
     if (Array.isArray(zxObject)) {
-        // console.log('zxObject1', zxObject);
         const zxResult = [];
         for (const zxChild of zxObject) {
             zxResult.push(zxSerialize(zxChild));
@@ -49,7 +48,6 @@ const zxSerialize = (zxObject) => {
         return zxResult;
     }
     if (zxObject && typeof zxObject === 'object') {
-        // console.log('zxObject2', typeof zxObject, zxObject);
         const zxResult = {};
         const zxObjectData = zxObject.zxData || zxObject;
         for (const zxKey in zxObjectData) {
@@ -57,7 +55,6 @@ const zxSerialize = (zxObject) => {
         }
         return zxResult;
     }
-    // console.log('zxObject3', typeof zxObject, zxObject);
     return zxObject;
 };
 

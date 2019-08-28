@@ -62,7 +62,6 @@ class ZxGame {
                 break;
 
             case 'zxReady':
-                console.log(this.zxPaths);
                 this.zxCurrentPath = this.zxPaths.length - 1;
                 this.zxCurrentPathPoint = this.zxPaths[this.zxCurrentPath].length - 1;
                 this.zxData.zxState = 'zxDrawing';
@@ -87,13 +86,12 @@ class ZxGame {
                 const zxNextPoint = this.zxPaths[this.zxCurrentPath][this.zxCurrentPathPoint];
                 for (const zxPlayer of this.zxData.zxPlayers) {
                     zxEmit(zxPlayer.zxSocket, 'zxNextPoint', {
-                        zxCurrentPath: this.zxCurrentPath,
+                        zxCurrentPath: this.zxPaths.length - this.zxCurrentPath,
                         zxNextPoint: zxNextPoint,
                     });
                 }
                 break;
         }
-        // console.log(this);
     }
 }
 
@@ -191,8 +189,6 @@ module.exports = {
         });
 
         zxSocket.on('zxMessage', zxHandleMessage(zxSocket, zxPlayer));
-
-        console.log('Connected: ' + zxSocket.id);
     },
 
     stat: (req, res) => {
