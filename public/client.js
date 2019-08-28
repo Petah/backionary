@@ -2,7 +2,7 @@ let zxSocket;
 
 const zxPendingResponses = {};
 
-let zxEmit = async (zxMessage, zxData = {}) => {
+const zxEmit = async (zxMessage, zxData = {}) => {
     const zxId = Math.random().toString().replace(/^[0.]+/g, '');
     zxLog('Send', zxMessage, zxData, zxId);
     const zxPromise = new Promise(zxResolve => {
@@ -12,34 +12,48 @@ let zxEmit = async (zxMessage, zxData = {}) => {
     return zxPromise;
 };
 
-let zxBindSocket = () => {
+const zxSetState = (zxState, zxData) => {
+    zxiIntroScreen.style.display = 'none';
+    zxiLobby.style.display = 'none';
+    zxiInGame.style.display = 'none';
+    switch (zxState) {
+        case 'zxiIntroScreen':
+            zxiIntroScreen.style.display = 'flex';
+            break;
+        case 'zxiLobby':
+            zxiLobby.style.display = 'flex';
+            break;
+        case 'zxiInGame':
+            zxiInGame.style.display = 'flex';
+            break;
+        case 'zxDrawing':
+            zxiInGame.style.display = 'flex';
+            break;
+    }
+};
 
-    zxSocket.on('start', () => {
-        enableButtons();
-        zxLog('Round ' + (points.win + points.lose + points.draw + 1));
-    });
-
-    zxSocket.on('end', () => {
-        zxLog('Waiting for opponent...');
-    });
-
+const zxBindSocket = () => {
     zxSocket.on('connect', async () => {
         zxLog('Connected');
         const zxConnected = await zxEmit('zxConnect', {
             zxName: zxiName.value,
         });
-        zxiIntroScreen.style.display = 'none';
-        zxiLobby.style.display = 'flex';
+        zxSetState('zxiLobby');
         const games = await zxEmit('zxListGames');
         console.log(games);
     });
 
     zxSocket.on('disconnect', () => {
-        zxLog('Connection lost!');
+        setTimeout(() => location.reload(), 1000);
     });
 
     zxSocket.on('error', () => {
-        zxLog('Connection error!');
+        setTimeout(() => location.reload(), 1000);
+    });
+
+    zxSocket.on('zxDrawerStart', (zxDrawerStart) => {
+        console.log('zxDrawerStart', zxDrawerStart);
+        zxSetState('zxDrawing', zxDrawerStart);
     });
 
     zxSocket.on('zxResponse', (zxResponse) => {

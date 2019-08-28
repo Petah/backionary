@@ -31,6 +31,7 @@
     "esminify": "^3.0.6",
     "html-minifier": "^4.0.0",
     "mocha": "^6.1.4",
+    "nodemon": "^1.19.1",
     "uglifycss": "0.0.29"
   }
 }

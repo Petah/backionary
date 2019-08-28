@@ -10,10 +10,7 @@ zxeConnect = () => {
 
 zxeCreateGame = async () => {
     const zxCreated = await zxEmit('zxCreateGame');
-    zxiLobby.style.display = 'none';
-    zxiInGame.style.display = 'flex';
-    const zxWord = await zxEmit('zxFetchWord');
-    zxiWord.innerText = zxWord;
+    zxSetState('zxiInGame');
 };
 
 zxeSendInput = async (zxEvent) => {
