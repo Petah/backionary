@@ -13,15 +13,12 @@
         <div class="zxFlexRow zxBox zxPaper zxTextCenter">
             <div class="zxFlexCol zxFlexCenter zxFlexGrow">
                 <h1>Welcome to Backionary.</h1>
-                <p>Backionary word game where you try to get the written word backwards. Enter you name below and click
+                <p>Backionary word game where you try to guess the written word backwards. Enter you name below and click
                     connect to get started.</p>
-                <div>
-                    <button id="zxiConnect" onclick="zxeConnect()">Single player</button>
-                </div>
-                <div>
-                    Name
+                <form action="" onsubmit="zxeConnect();event.preventDefault()">
+                    Your name:
                     <input id="zxiName">
-                    <button id="zxiConnect" onclick="zxeConnect()">Multiplayer</button>
+                    <button>Start</button>
                 </div>
             </div>
         </div>
@@ -30,7 +27,7 @@
         <div class="zxBox zxPaper zxFlexRow">
             <div id="zxiLobbyGames">
                 <b>List of games</b>
-                <div>PetahNZ's Game (2)<button>Join Game</button></div>
+                <div id="zxiGameList"></div>
             </div>
             <hr class="zxVr" />
             <div>
@@ -41,8 +38,7 @@
     <div class="zxDrawing zxGuessing zxFlexRow zxFlexCenter zxFlexGrow">
         <div class="zxPaper">
             <b>List of players</b>
-            <div>Petah 300pts</div>
-            <div>Melon Logic 270pts</div>
+            <div id="zxiPlayerList"></div>
         </div>
         <div>
             <div class="zxDrawing zxTextCenter">

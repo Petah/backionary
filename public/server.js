@@ -27,6 +27,15 @@ class ZxGame {
         this.zxCurrentPathPoint = null;
     }
 
+    zxBroadcast(zxHandler, zxData, zxExcludePlayer) {
+        for (const zxPlayer of this.zxData.zxPlayers) {
+            if (zxPlayer === zxExcludePlayer) {
+                continue;
+            }
+            zxEmit(zxPlayer.zxSocket, zxHandler, zxData);
+        }
+    }
+
     zxUpdateLoop() {
         switch (this.zxData.zxState) {
             case 'zxIdle':
@@ -44,14 +53,10 @@ class ZxGame {
                 zxEmit(this.zxData.zxCurrentPlayer.zxSocket, 'zxDrawerStart', {
                     zxWord,
                 });
-                for (const zxPlayer of this.zxData.zxPlayers) {
-                    if (zxPlayer === this.zxData.zxCurrentPlayer) {
-                        continue;
-                    }
-                    zxEmit(zxPlayer.zxSocket, 'zxDrawStart', {
-                        zxPlayer: zxPlayer,
-                    });
-                }
+
+                this.zxBroadcast('zxDrawStart', {
+                    zxPlayer: this.zxData.zxCurrentPlayer,
+                }, this.zxData.zxCurrentPlayer);
 
                 this.zxData.zxRound = 1;
                 this.zxData.zxState = 'zxWaitingOnDrawer';
@@ -66,11 +71,9 @@ class ZxGame {
                 this.zxCurrentPathPoint = this.zxPaths[this.zxCurrentPath].length - 1;
                 this.zxData.zxState = 'zxDrawing';
 
-                for (const zxPlayer of this.zxData.zxPlayers) {
-                    zxEmit(zxPlayer.zxSocket, 'zxDrawing', {
-                        zxPathBounds: zxGetPathBounds(this.zxPaths),
-                    });
-                }
+                this.zxBroadcast('zxDrawing', {
+                    zxPathBounds: zxGetPathBounds(this.zxPaths),
+                });
                 break;
 
             case 'zxDrawing':
@@ -84,12 +87,10 @@ class ZxGame {
                     this.zxCurrentPathPoint = this.zxPaths[this.zxCurrentPath].length - 1;
                 }
                 const zxNextPoint = this.zxPaths[this.zxCurrentPath][this.zxCurrentPathPoint];
-                for (const zxPlayer of this.zxData.zxPlayers) {
-                    zxEmit(zxPlayer.zxSocket, 'zxNextPoint', {
-                        zxCurrentPath: this.zxPaths.length - this.zxCurrentPath,
-                        zxNextPoint: zxNextPoint,
-                    });
-                }
+                this.zxBroadcast('zxNextPoint', {
+                    zxCurrentPath: this.zxPaths.length - this.zxCurrentPath,
+                    zxNextPoint: zxNextPoint,
+                });
                 break;
         }
     }
@@ -99,7 +100,7 @@ class ZxPlayer {
     constructor(zxSocket) {
         this.zxData = {
             zxName: null,
-            zxScore: null,
+            zxScore: 0,
             // zxDrawnWords: [],
         };
         this.zxSocket = zxSocket;
@@ -109,11 +110,11 @@ class ZxPlayer {
 
 const zxSockets = {};
 const zxPlayers = [];
-const zxGames = {};
+const zxGames = [];
 
 const zxHandlers = {
     zxConnect(zxPlayer, zxData) {
-        zxPlayer.zxName = zxData.zxName;
+        zxPlayer.zxData.zxName = zxData.zxName;
         return {
             zxConnected: true,
         };
@@ -122,8 +123,20 @@ const zxHandlers = {
     zxCreateGame(zxPlayer, zxData) {
         const zxGame = new ZxGame();
         zxGame.zxData.zxPlayers.push(zxPlayer);
-        zxGames[zxGame.zxData.zxId] = zxGame;
+        zxGames.push(zxGame);
         zxPlayer.zxGame = zxGame;
+        return zxGame;
+    },
+
+    zxJoinGame(zxPlayer, zxData) {
+        const zxGame = zxGames.find(zxGame => zxGame.zxData.zxId === zxData.zxGameId);
+        if (!zxGame) {
+            return;
+        }
+        zxGame.zxData.zxPlayers.push(zxPlayer);
+        zxGame.zxBroadcast('zxPlayerJoined', {
+            zxPlayer: zxPlayer,
+        }, zxPlayer);
         return zxGame;
     },
 
@@ -133,7 +146,7 @@ const zxHandlers = {
 
     zxSubmitText(zxPlayer, zxData) {
         if (zxData.zxText.trim()) {
-            zxPlayer.zxGame.zxData.zxTexts.push(`${zxPlayer.zxName}: ${zxData.zxText}`);
+            zxPlayer.zxGame.zxData.zxTexts.push(`${zxPlayer.zxData.zxName}: ${zxData.zxText}`);
         }
         return zxPlayer.zxGame.zxData.zxTexts.slice(-5).reverse();
     },

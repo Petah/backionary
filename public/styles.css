@@ -6,7 +6,7 @@
 
 html,
 body {
-  font-family: 'Segoe Print', 'Freestyle Script', 'Lucida Calligraphy', 'Lucida Handwriting', 'Segoe Script', 'Comic Sans', cursive;
+  font-family: "Segoe Print", "Comic Sans MS", cursive;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -55,15 +55,15 @@ body {
   background: #fff;
   padding: 1rem;
   margin: 1rem;
-  border: solid 2px #41403E;
+  border: solid 2px #41403e;
   border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
 }
 
 button {
-  font-family: 'Segoe Print', 'Freestyle Script', 'Lucida Calligraphy', 'Lucida Handwriting', 'Segoe Script', 'Comic Sans', cursive;
+  font-family: "Segoe Print", "Comic Sans MS", cursive;
   background: #ddd;
   padding: 0.5rem;
-  border: solid 2px #41403E;
+  border: solid 2px #41403e;
   border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
   cursor: pointer;
@@ -74,12 +74,12 @@ button {
 hr {
   margin: 1rem 0;
   border-top: none;
-  border-top: solid 1px #41403E;
+  border-top: solid 1px #41403e;
 }
 
 hr .zxVr {
   margin: 0 1rem;
-  border-left: solid 1px #41403E;
+  border-left: solid 1px #41403e;
 }
 
 #zxiChatLog {
@@ -88,7 +88,6 @@ hr .zxVr {
 
 #zxiSvg {
   cursor: url(pencil.png) 0 128, auto;
-  ;
 }
 
 path,
@@ -103,7 +102,7 @@ path,
 
 input {
   padding: 0.5rem;
-  font-family: 'Segoe Print', 'Freestyle Script', 'Lucida Calligraphy', 'Lucida Handwriting', 'Segoe Script', 'Comic Sans', cursive;
+  font-family: "Segoe Print", "Comic Sans MS", cursive;
   border-top: 0;
   border-right: 0;
   border-left: 0;

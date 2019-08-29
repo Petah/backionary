@@ -18,6 +18,7 @@ const zxEmit = (zxSocket, zxHandler, zxData = {}) => {
 };
 
 const zxEmitAwait = async (zxSocket, zxHandler, zxData = {}) => {
+    zxData = zxSerialize(zxData);
     const zxId = zxUid();
     zxLog('Send message', zxHandler, zxData, zxId);
     const zxPromise = new Promise((zxResolve, zxReject) => {

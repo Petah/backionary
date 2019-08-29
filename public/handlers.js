@@ -9,8 +9,9 @@ zxeConnect = () => {
 };
 
 zxeCreateGame = async () => {
-    const zxCreated = await zxEmitAwait(zxSocket, 'zxCreateGame');
-    zxSetState('zxInGame');
+    const zxGame = await zxEmitAwait(zxSocket, 'zxCreateGame');
+    zxUpdatePlayerList(zxGame);
+    zxSetState('zxGuessing', {});
 };
 
 zxeSendInput = async (zxEvent) => {
