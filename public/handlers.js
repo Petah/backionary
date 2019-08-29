@@ -1,4 +1,9 @@
 zxeConnect = () => {
+    if (!zxiName.value) {
+        alert('Please enter your name.');
+        return;
+    }
+    localStorage.setItem('name', zxiName.value);
     zxSocket = io({
         upgrade: false,
         transports: [

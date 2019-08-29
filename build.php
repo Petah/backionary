@@ -5,7 +5,7 @@ mkdir("$path");
 
 $token = 'a';
 $getToken = function () use (&$token) {
-    while ($token == 'i' || $token == 'j' || $token == 'p' || $token == 'x' || $token == 'y') {
+    while ($token == 'i' || $token == 'j' || $token == 'p' || $token == 'x' || $token == 'y' || $token == 'do') {
         $token++;
     }
     return $token++;

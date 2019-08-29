@@ -12,13 +12,13 @@ class ZxGame {
             zxName: null,
             zxPlayers: [],
             zxTexts: [],
-            zxCurrentWord: null,
             zxCurrentDrawData: null,
             zxCurrentPlayer: null,
-            zxSkillLevel: 'zxMedium',
+            zxSkillLevel: 'zxEasy',
             zxState: 'zxIdle',
         };
 
+        this.zxCurrentWord = null;
         this.zxCurrentPlayerIndex = 10000;
         this.zxPaths = null;
         this.zxUpdateTimer = setInterval(this.zxUpdateLoop.bind(this), 100);
@@ -47,14 +47,16 @@ class ZxGame {
                 this.zxData.zxCurrentPlayer = this.zxData.zxPlayers[this.zxCurrentPlayerIndex];
 
                 // Get word for player to draw
-                let zxWord = zxWordList[this.zxData.zxSkillLevel][Math.floor(Math.random() * zxWordList[this.zxData.zxSkillLevel].length)];
+                this.zxCurrentWord = zxWordList[this.zxData.zxSkillLevel][Math.floor(Math.random() * zxWordList[this.zxData.zxSkillLevel].length)];
                 // @todo make sure word hasn't been used recently
 
                 zxEmit(this.zxData.zxCurrentPlayer.zxSocket, 'zxDrawerStart', {
-                    zxWord,
+                    zxGame: this,
+                    zxWord: this.zxCurrentWord,
                 });
 
                 this.zxBroadcast('zxDrawStart', {
+                    zxGame: this,
                     zxPlayer: this.zxData.zxCurrentPlayer,
                 }, this.zxData.zxCurrentPlayer);
 
@@ -98,7 +100,9 @@ class ZxGame {
 
 class ZxPlayer {
     constructor(zxSocket) {
+        zxLog('Creating player', zxSocket.id);
         this.zxData = {
+            zxId: zxUid(),
             zxName: null,
             zxScore: 0,
             // zxDrawnWords: [],
@@ -135,8 +139,10 @@ const zxHandlers = {
         }
         zxGame.zxData.zxPlayers.push(zxPlayer);
         zxGame.zxBroadcast('zxPlayerJoined', {
+            zxGame: zxGame,
             zxPlayer: zxPlayer,
         }, zxPlayer);
+        zxPlayer.zxGame = zxGame;
         return zxGame;
     },
 
@@ -145,8 +151,15 @@ const zxHandlers = {
     },
 
     zxSubmitText(zxPlayer, zxData) {
-        if (zxData.zxText.trim()) {
-            zxPlayer.zxGame.zxData.zxTexts.push(`${zxPlayer.zxData.zxName}: ${zxData.zxText}`);
+        const zxText = zxData.zxText.trim().toLowerCase();
+        if (zxText) {
+            zxPlayer.zxGame.zxData.zxTexts.push(`${zxPlayer.zxData.zxName}: ${zxText}`);
+        }
+        if (zxText == zxPlayer.zxGame.zxCurrentWord) {
+            zxPlayer.zxGame.zxData.zxTexts.push(`You guessed correctly, the word is ${zxPlayer.zxGame.zxCurrentWord}!`);
+            // @todo make the score variable based on time
+            zxPlayer.zxData.zxScore += 100;
+            zxPlayer.zxGame.zxData.zxState = 'zxIdle';
         }
         return zxPlayer.zxGame.zxData.zxTexts.slice(-5).reverse();
     },

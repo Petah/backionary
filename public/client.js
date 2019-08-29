@@ -1,3 +1,5 @@
+zxiName.value = localStorage.getItem('name') || '';;
+
 let zxSocket;
 
 const zxHide = (zxClass) => {
@@ -18,6 +20,7 @@ const zxSetState = (zxState, zxData) => {
     zxHide('zxLobby');
     zxHide('zxDrawing');
     zxHide('zxGuessing');
+    zxHide('zxWaitingOnNextRound');
     zxShow(zxState);
     switch (zxState) {
         case 'zxDrawing':
@@ -35,7 +38,13 @@ const zxSetState = (zxState, zxData) => {
 
 const zxHandlers = {
     zxDrawerStart(zxPlayer, zxData) {
+        zxUpdatePlayerList(zxData.zxGame);
         zxSetState('zxDrawing', zxData);
+    },
+
+    zxDrawStart(zxPlayer, zxData) {
+        zxUpdatePlayerList(zxData.zxGame);
+        zxSetState('zxWaitingOnNextRound', {});
     },
 
     zxDrawing(zxPlayer, zxData) {
@@ -50,10 +59,15 @@ const zxHandlers = {
             zxAppendSvgPath(zxPathElement, zxData.zxNextPoint);
         }
     },
+
+    zxPlayerJoined(zxPlayer, zxData) {
+        zxUpdatePlayerList(zxData.zxGame);
+    },
 };
 
 const zxBindSocket = () => {
     zxSocket.on('connect', async () => {
+        zxLog('Socket connected');
         await zxEmitAwait(zxSocket, 'zxConnect', {
             zxName: zxiName.value,
         });
@@ -71,7 +85,7 @@ const zxBindSocket = () => {
                     zxGameId: zxGame.zxId,
                 });
                 zxUpdatePlayerList(zxReturnedGame);
-                zxSetState('zxGuessing', {});
+                zxSetState('zxWaitingOnNextRound', {});
             });
             zxDiv.append(zxButton);
             zxiGameList.append(zxDiv);

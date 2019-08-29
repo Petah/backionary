@@ -13,13 +13,14 @@
         <div class="zxFlexRow zxBox zxPaper zxTextCenter">
             <div class="zxFlexCol zxFlexCenter zxFlexGrow">
                 <h1>Welcome to Backionary.</h1>
-                <p>Backionary word game where you try to guess the written word backwards. Enter you name below and click
+                <p>Backionary word game where you try to guess the written word backwards. Enter you name below and
+                    click
                     connect to get started.</p>
                 <form action="" onsubmit="zxeConnect();event.preventDefault()">
                     Your name:
                     <input id="zxiName">
                     <button>Start</button>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -35,7 +36,7 @@
             </div>
         </div>
     </div>
-    <div class="zxDrawing zxGuessing zxFlexRow zxFlexCenter zxFlexGrow">
+    <div class="zxDrawing zxGuessing zxWaitingOnNextRound zxFlexRow zxFlexCenter zxFlexGrow">
         <div class="zxPaper">
             <b>List of players</b>
             <div id="zxiPlayerList"></div>
@@ -47,6 +48,9 @@
             </div>
             <div class="zxGuessing zxTextCenter">
                 <h1>Guess the word!</h1>
+            </div>
+            <div class="zxWaitingOnNextRound">
+                <h1>Waiting for next round to begin.</h1>
             </div>
             <div id="zxiDraw" class="zxDrawing zxGuessing zxBox zxPaper">
                 <svg id="zxiSvg" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="white">
