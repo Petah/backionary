@@ -1193,7 +1193,7 @@ const zxHandlers = {
                 zxCount++;
             }
         }
-        if (zxCount > 0) {
+        if (zxCount > 1) {
             zxName = zxName + ' ' + zxCount;
         }
         zxPlayer.zxData.zxName = zxName;
