@@ -1,9 +1,9 @@
 <?php
-$path = __DIR__ . '/build/';
+$path = __DIR__ . '/public/';
 passthru("rm -rf $path");
 mkdir("$path");
 
-$token = 'a';
+$token = 'aa';
 $getToken = function () use (&$token) {
     while ($token == 'i' || $token == 'j' || $token == 'p' || $token == 'x' || $token == 'y' || $token == 'do') {
         $token++;
@@ -13,7 +13,7 @@ $getToken = function () use (&$token) {
 
 $tokens = [];
 
-foreach (glob(__DIR__ . '/public/*.*') as $file) {
+foreach (glob(__DIR__ . '/src/*.*') as $file) {
     echo $file . PHP_EOL;
     $content = file_get_contents($file);
     if (preg_match('/\.(js|css|html|svg)$/', $file)) {
@@ -36,18 +36,18 @@ foreach (glob(__DIR__ . '/public/*.*') as $file) {
         passthru("node_modules\.bin\html-minifier --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype $outputFile > $outputFile.min && rm $outputFile && mv $outputFile.min $outputFile");
     }
     if (preg_match('/\.(js)$/', $file)) {
-        passthru("node_modules\\.bin\\esminify -o $outputFile $outputFile");
+        passthru("node_modules\\.bin\\esminify --keep-top-level -o $outputFile $outputFile");
     }
 }
 
 
 
-if (is_file(__DIR__ . '/build.zip')) {
-    echo 'Deleting build.zip' . PHP_EOL . PHP_EOL;
-    unlink(__DIR__ . '/build.zip');
+if (is_file(__DIR__ . '/public.zip')) {
+    echo 'Deleting public.zip' . PHP_EOL . PHP_EOL;
+    unlink(__DIR__ . '/public.zip');
 }
-echo 'Compressing build.zip' . PHP_EOL . PHP_EOL;
-passthru('kzip build.zip build/*');
+echo 'Compressing public.zip' . PHP_EOL . PHP_EOL;
+passthru('kzip public.zip public/*');
 echo PHP_EOL . PHP_EOL;
 
-echo 'Final size: ' . filesize(__DIR__ . '/build.zip') . PHP_EOL . PHP_EOL;
+echo 'Final size: ' . filesize(__DIR__ . '/public.zip') . PHP_EOL . PHP_EOL;
