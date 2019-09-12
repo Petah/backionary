@@ -4,13 +4,14 @@ let zxSocket;
 
 const zxHide = (zxClass) => {
     for (const zxElement of document.querySelectorAll('.' + zxClass)) {
+        zxElement.dataset.display = zxElement.dataset.display || (zxElement.style.display == 'none' ? '' : zxElement.style.display);
         zxElement.style.display = 'none';
     }
 };
 
 const zxShow = (zxClass) => {
     for (const zxElement of document.querySelectorAll('.' + zxClass)) {
-        zxElement.style.display = '';
+        zxElement.style.display = zxElement.dataset.display || '';
     }
 };
 
@@ -126,7 +127,7 @@ const zxUpdatePlayerList = (zxGame) => {
     zxiPlayerList.innerHTML = '';
     for (const zxPlayer of zxGame.zxPlayers) {
         const zxDiv = document.createElement('div');
-        zxDiv.innerText = `${zxPlayer.zxName} ${zxPlayer.zxScore}pts`;
+        zxDiv.innerText = `${zxPlayer.zxName} - ${zxPlayer.zxScore}pts`;
         zxiPlayerList.append(zxDiv);
     }
 };

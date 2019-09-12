@@ -13,10 +13,15 @@ body {
   width: 100vw;
   height: 100vh;
   background-color: #f6f7f8;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   background-size: 40px 40px;
   background-image: url(grid.svg);
   user-select: none;
+}
+
+p {
+  margin-bottom: 0.2rem;
 }
 
 #zxiDraw {
@@ -47,8 +52,6 @@ body {
 }
 
 .zxBox {
-  width: 40vw;
-  height: 40vh;
 }
 
 .zxPaper {

@@ -35,9 +35,12 @@ foreach (glob(__DIR__ . '/public/*.*') as $file) {
     if (preg_match('/\.(html)$/', $file)) {
         passthru("node_modules\.bin\html-minifier --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype $outputFile > $outputFile.min && rm $outputFile && mv $outputFile.min $outputFile");
     }
+    if (preg_match('/\.(js)$/', $file)) {
+        passthru("node_modules\\.bin\\esminify -o $outputFile $outputFile");
+    }
 }
 
-passthru("node_modules\\.bin\\esminify -o $path $path");
+
 
 if (is_file(__DIR__ . '/build.zip')) {
     echo 'Deleting build.zip' . PHP_EOL . PHP_EOL;

@@ -1019,9 +1019,9 @@ class ZxGame {
                 console.error('Error in update loop', zxError);
             });
         }, 100);
-        this.zxUpdateTimer = setInterval(() => {
-            // console.log(this.zxData.zxState);
-        }, 1000);
+        // this.zxUpdateTimer = setInterval(() => {
+        //     console.log(this.zxData.zxState);
+        // }, 1000);
 
         this.zxCurrentPath = null;
         this.zxCurrentPathPoint = null;
@@ -1037,6 +1037,7 @@ class ZxGame {
     }
 
     async zxUpdateLoop() {
+        // console.log(this.zxData.zxState);
         switch (this.zxData.zxState) {
             case 'zxIdle':
                 // Get next player
@@ -1046,6 +1047,7 @@ class ZxGame {
                 }
 
                 const zxSavedWords = await zxParseSavedWords();
+                console.log(zxSavedWords);
                 if (this.zxData.zxPlayers.length === 1 && zxSavedWords.length > 0) {
                     // Only 1 player so use saved words
                     this.zxData.zxCurrentPlayer = null;
@@ -1184,7 +1186,17 @@ const zxGames = [];
 const zxHandlers = {
     zxConnect(zxPlayer, zxData) {
         // @todo validate name is avalible
-        zxPlayer.zxData.zxName = zxData.zxName;
+        let zxName = zxData.zxName || 'Player';
+        let zxCount = 1;
+        for (const zxPlayerNameCheck of zxPlayer.zxGame.zxData.zxPlayers) {
+            if (zxPlayerNameCheck.zxData.zxName == zxName || zxPlayerNameCheck.zxData.zxName == zxName + ' ' + zxCount) {
+                zxCount++;
+            }
+        }
+        if (zxCount > 0) {
+            zxName = zxName + ' ' + zxCount;
+        }
+        zxPlayer.zxData.zxName = zxName;
         zxEmit(zxPlayer.zxSocket, 'zxGameConnected', {});
         zxPlayer.zxGame.zxBroadcast('zxUpdatePlayers', {
             zxGame: zxPlayer.zxGame,
@@ -1249,6 +1261,10 @@ const zxHandlers = {
 
     async zxDoneDrawing(zxPlayer, zxPaths) {
         if (zxPlayer.zxGame.zxData.zxState === 'zxWaitingOnDrawer' && zxPlayer === zxPlayer.zxGame.zxData.zxCurrentPlayer) {
+            if (!zxPaths.length) {
+                zxPlayer.zxGame.zxData.zxState = 'zxIdle';
+                return;
+            }
             zxPlayer.zxGame.zxPaths = zxPaths;
             zxPlayer.zxGame.zxData.zxState = 'zxReady';
 
@@ -1259,16 +1275,17 @@ const zxHandlers = {
                 zxPaths,
             });
 
-            // let zxSavedWordsString = '';
-            // for (const zxSavedWord of zxSavedWords) {
-            //     const zxBinaryPaths = zxPathsToBinary(zxSavedWord.zxPaths);
-            //     const zxNextString = zxSavedWord.zxWord + ':' + zxBinaryPaths.length + ':' + zxBinaryPaths + ':';
-            //     if (zxSavedWordsString.length + zxNextString.length < 13312 / 2) {
-            //         zxSavedWordsString += zxNextString;
-            //     }
-            // }
-            console.log('Save words', zxSavedWords);
-            await storage.set('savedWords', zxSavedWords, true);
+            let zxSavedWordsString = '';
+            for (const zxSavedWord of zxSavedWords) {
+                const zxBinaryPaths = zxPathsToBinary(zxSavedWord.zxPaths);
+                const zxNextString = zxSavedWord.zxWord + ':' + zxBinaryPaths.length + ':' + zxBinaryPaths + ':';
+                if (zxSavedWordsString.length + zxNextString.length < 13312 / 2) {
+                    zxSavedWordsString += zxNextString;
+                }
+            }
+            await storage.set('savedWords', zxSavedWordsString, false);
+            // console.log('Save words', zxSavedWords);
+            // await storage.set('savedWords', zxSavedWords, true);
         }
     },
 };
@@ -1330,7 +1347,7 @@ const zxBinaryToPaths = (zxBinaryString) => {
 }
 
 const zxParseSavedWords = async () => {
-    return await storage.get('savedWords', [], true);
+    // return await storage.get('savedWords', [], true);
     let zxSavedWords = await storage.get('savedWords', '', false);
     const zxResult = [];
     while (zxSavedWords.length > 0) {
