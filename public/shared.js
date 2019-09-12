@@ -2,13 +2,13 @@ const zxPendingResponses = {};
 
 const zxUid = () => Math.random().toString().replace(/^[0.]+/g, '');
 
-const zxVerbose = (...zxArgs) => console.log(...zxArgs);
-const zxLog = (...zxArgs) => console.log(...zxArgs);
-const zxLogError = (...zxArgs) => console.error(...zxArgs);
+// const zxVerbose = (...zxArgs) => console.log(...zxArgs);
+// const zxLog = (...zxArgs) => console.log(...zxArgs);
+// const zxLogError = (...zxArgs) => console.error(...zxArgs);
 
-// const zxVerbose = (...zxArgs) => false;
-// const zxLog = (...zxArgs) => false;
-// const zxLogError = (...zxArgs) => false;
+const zxVerbose = (...zxArgs) => false;
+const zxLog = (...zxArgs) => false;
+const zxLogError = (...zxArgs) => false;
 
 const zxEmit = (zxSocket, zxHandler, zxData = {}) => {
     zxEmitAwait(zxSocket, zxHandler, zxData).then((zxResponse) => {
