@@ -20,7 +20,9 @@ const zxSetState = (zxState, zxData) => {
     zxHide('zxLobby');
     zxHide('zxDrawing');
     zxHide('zxGuessing');
+    zxHide('zxWaiting');
     zxHide('zxWaitingOnNextRound');
+    zxHide('zxCountDown');
     zxShow(zxState);
     switch (zxState) {
         case 'zxDrawing':
@@ -38,6 +40,7 @@ const zxSetState = (zxState, zxData) => {
 
 const zxHandlers = {
     zxDrawerStart(zxPlayer, zxData) {
+        zxClearSvg();
         zxUpdatePlayerList(zxData.zxGame);
         zxSetState('zxDrawing', zxData);
     },
@@ -47,8 +50,17 @@ const zxHandlers = {
         zxSetState('zxWaitingOnNextRound', {});
     },
 
+    zxGameConnected(zxPlayer, zxData) {
+        zxSetState('zxWaitingOnNextRound', {});
+    },
+
     zxDrawing(zxPlayer, zxData) {
         zxSetState('zxGuessing', zxData);
+    },
+
+    zxWaitingForRoundEnd(zxPlayer, zxData) {
+        zxClearSvg();
+        zxSetState('zxWaiting', zxData);
     },
 
     zxNextPoint(zxPlayer, zxData) {
@@ -60,8 +72,20 @@ const zxHandlers = {
         }
     },
 
-    zxPlayerJoined(zxPlayer, zxData) {
+    zxUpdatePlayers(zxPlayer, zxData) {
         zxUpdatePlayerList(zxData.zxGame);
+    },
+
+    zxRecieveText(zxPlayer, zxData) {
+        if (zxData.zxLines.length > 0) {
+            zxiChatLog.innerText = zxData.zxLines.join('\n');
+            zxiChatLog.style.display = '';
+        }
+    },
+
+    zxCountDown(zxPlayer, zxData) {
+        zxShow('zxCountDown');
+        zxiCountDown.innerText = zxData.zxCountDown.toFixed(1);
     },
 };
 
@@ -71,25 +95,6 @@ const zxBindSocket = () => {
         await zxEmitAwait(zxSocket, 'zxConnect', {
             zxName: zxiName.value,
         });
-        zxSetState('zxLobby');
-        const zxGames = await zxEmitAwait(zxSocket, 'zxListGames');
-        zxiGameList.innerHTML = '';
-        for (const zxGame of zxGames) {
-            const zxDiv = document.createElement('div');
-            // @todo fix pluralization
-            zxDiv.innerText = `${zxGame.zxPlayers[0].zxName}'s game (${zxGame.zxPlayers.length} players)`;
-            const zxButton = document.createElement('button');
-            zxButton.innerText = 'Join game';
-            zxButton.addEventListener('click', async () => {
-                const zxReturnedGame = await zxEmitAwait(zxSocket, 'zxJoinGame', {
-                    zxGameId: zxGame.zxId,
-                });
-                zxUpdatePlayerList(zxReturnedGame);
-                zxSetState('zxWaitingOnNextRound', {});
-            });
-            zxDiv.append(zxButton);
-            zxiGameList.append(zxDiv);
-        }
     });
 
     zxSocket.on('disconnect', () => {

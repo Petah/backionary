@@ -24,13 +24,9 @@ zxeSendInput = async (zxEvent) => {
     if (zxEvent.keyCode == 13) {
         const zxText = zxiChatInput.value;
         zxiChatInput.value = '';
-        const zxResponse = await zxEmitAwait(zxSocket, 'zxSubmitText', {
+        await zxEmitAwait(zxSocket, 'zxSubmitText', {
             zxText: zxText,
         });
-        zxiChatLog.innerHTML = '';
-        for (const zxLine of zxResponse) {
-            zxiChatLog.innerText += zxLine + '\n';
-        }
     }
 };
 

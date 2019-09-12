@@ -6,13 +6,19 @@ zxCurrentPath = [];
 zxCreateSvgPath = (zxPoint) => {
     const zxPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     zxPath.setAttribute('class', 'zxStroke');
-    zxPath.setAttribute('d', `M ${zxPoint.x} ${zxPoint.y}`);
+    zxPath.setAttribute('d', `M ${zxPoint[0]} ${zxPoint[1]}`);
     zxiSvg.appendChild(zxPath);
     return zxPath;
 };
 
+zxClearSvg = () => {
+    for (const zxPath of zxiSvg.querySelectorAll('path')) {
+        zxPath.parentNode.removeChild(zxPath);
+    }
+};
+
 zxAppendSvgPath = (zxPath, zxPoint) => {
-    zxPath.setAttribute('d', zxPath.getAttribute('d') + ` L ${zxPoint.x} ${zxPoint.y}`);
+    zxPath.setAttribute('d', zxPath.getAttribute('d') + ` L ${zxPoint[0]} ${zxPoint[1]}`);
 };
 
 // SVG events stuff
@@ -22,10 +28,10 @@ getSvgPoint = (e) => {
     zxSvgPoint.y = e.clientY;
 
     zxSvgPoint = zxSvgPoint.matrixTransform(zxiSvg.getScreenCTM().inverse());
-    zxSvgPoint = {
-        x: zxSvgPoint.x,
-        y: zxSvgPoint.y,
-    };
+    zxSvgPoint = [
+        Math.round(zxSvgPoint.x),
+        Math.round(zxSvgPoint.y),
+    ];
     zxCurrentPath.push(zxSvgPoint);
     return zxSvgPoint;
 };

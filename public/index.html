@@ -36,7 +36,7 @@
             </div>
         </div>
     </div>
-    <div class="zxDrawing zxGuessing zxWaitingOnNextRound zxFlexRow zxFlexCenter zxFlexGrow">
+    <div class="zxDrawing zxGuessing zxWaiting zxWaitingOnNextRound zxFlexRow zxFlexCenter zxFlexGrow">
         <div class="zxPaper">
             <b>List of players</b>
             <div id="zxiPlayerList"></div>
@@ -46,23 +46,21 @@
                 <h1>Write the word:</h1>
                 <h1 id="zxiWord"></h1>
             </div>
-            <div class="zxGuessing zxTextCenter">
-                <h1>Guess the word!</h1>
-            </div>
-            <div class="zxWaitingOnNextRound">
-                <h1>Waiting for next round to begin.</h1>
-            </div>
-            <div id="zxiDraw" class="zxDrawing zxGuessing zxBox zxPaper">
+            <h1 class="zxGuessing zxTextCenter">Guess the word!</h1>
+            <h1 class="zxWaiting zxTextCenter">Waiting for round to finish.</h1>
+            <h1 class="zxWaitingOnNextRound zxTextCenter">Waiting for next round to begin.</h1>
+            <h2 class="zxCountDown zxTextCenter"><span id="zxiCountDown">5</span> seconds left.</h2>
+            <div id="zxiDraw" class="zxDrawing zxGuessing zxWaiting zxBox zxPaper">
                 <svg id="zxiSvg" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="white">
                 </svg>
             </div>
             <div class="zxDrawing zxTextCenter">
                 <button onclick="zxeDoneDrawing()">Finished</button>
             </div>
-            <div class="zxGuessing zxPaper">
+            <div class="zxGuessing zxPaper" style="padding: 0.2rem 1rem">
                 Your guess: <input id="zxiChatInput" onkeypress="zxeSendInput(event)">
-                <div id="zxiChatLog"></div>
             </div>
+            <div id="zxiChatLog" class="zxPaper" style="display: none"></div>
         </div>
     </div>
 

@@ -2,8 +2,13 @@ const zxPendingResponses = {};
 
 const zxUid = () => Math.random().toString().replace(/^[0.]+/g, '');
 
-const zxLog = (...zxArgs) => console.log(...zxArgs);
-const zxLogError = (...zxArgs) => console.error(...zxArgs);
+// const zxVerbose = (...zxArgs) => console.log(...zxArgs);
+// const zxLog = (...zxArgs) => console.log(...zxArgs);
+// const zxLogError = (...zxArgs) => console.error(...zxArgs);
+
+const zxVerbose = (...zxArgs) => false;
+const zxLog = (...zxArgs) => false;
+const zxLogError = (...zxArgs) => false;
 
 const zxEmit = (zxSocket, zxHandler, zxData = {}) => {
     zxEmitAwait(zxSocket, zxHandler, zxData).then((zxResponse) => {
@@ -36,7 +41,7 @@ const zxEmitAwait = async (zxSocket, zxHandler, zxData = {}) => {
 
 const zxEmitResponse = (zxSocket, zxHandler, zxId, zxResponse = {}) => {
     zxResponse = zxSerialize(zxResponse);
-    zxLog('Send response', zxHandler, zxId, zxResponse);
+    zxVerbose('Send response', zxHandler, zxId, zxResponse);
     zxSocket.emit('zxResponse', [zxHandler, zxId, zxResponse]);
 };
 
