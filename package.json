@@ -29,7 +29,7 @@
     "sqlite3": "^4.0.9"
   },
   "devDependencies": {
-    "esminify": "^3.0.6",
+    "esminify": "^4.0.5",
     "html-minifier": "^4.0.0",
     "mocha": "^6.1.4",
     "nodemon": "^1.19.1",
